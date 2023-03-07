@@ -142,5 +142,35 @@ public class Matiere {
 			if(state != null) state.close();
 		}
 	}
+	
+	public Matiere select(String idMatiere) throws SQLException
+	{
+		String requete = "select * from matiere where idmatiere='"+idMatiere+"'";
+		Matiere retour = new Matiere();
+		Connection connect = null;
+		Statement state = null;
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			ResultSet rs = state.executeQuery(requete);
+			while(rs.next())
+			{
+				retour.setIdMatiere(rs.getString("idmatiere"));
+				retour.setNomMatiere(rs.getString("nommatiere"));
+			}
+			rs.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+		return retour;
+	}
 
 }

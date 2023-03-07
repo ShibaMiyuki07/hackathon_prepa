@@ -156,7 +156,35 @@ public class Note_etudiant_matiere {
 		}
 	}
 
-    
+    public Note_etudiant_matiere select(String idEtudiant,String idMatiere) throws SQLException
+    {
+    	Note_etudiant_matiere retour = new Note_etudiant_matiere();
+    	String requete = "select * from note_etudiant_matiere  where idetudiant='"+idEtudiant+"' and idmatiere='"+idMatiere+"'";
+    	Connection connect = null;
+    	Statement state = null;
+    	try
+    	{
+    		connect = new Connexion().setConnect();
+    		state = connect.createStatement();
+    		ResultSet rs = state.executeQuery(requete);
+    		while(rs.next())
+    		{
+    			retour.setNote(rs.getFloat("note"));
+    			retour.setIdetudiant(rs.getString("idetudiant"));
+    			retour.setIdmatiere(rs.getString("idmatiere"));
+    		}
+    	}
+    	catch(Exception e)
+    	{
+    		
+    	}
+    	finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+    	return retour;
+    }
     
 
 }

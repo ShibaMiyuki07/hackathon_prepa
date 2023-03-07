@@ -119,11 +119,11 @@ public class Emploi_temps_auto {
 			{
 				Emploi_temps_auto ema = new Emploi_temps_auto();
 				ema.setIdetudiant(rs.getString("idetudiant"));
-                                ema.setIdJour(rs.getString("idjour"));
-                                ema.setHeureDebut(rs.getTime("heuredebut"));
-                                ema.setHeureFin(rs.getTime("heurefin"));
-                                ema.setIdMatiere(rs.getString("idmatiere"));
-                                ema.setEtat(rs.getInt("etat"));
+                ema.setIdJour(rs.getString("idjour"));
+                ema.setHeureDebut(rs.getTime("heuredebut"));
+                ema.setHeureFin(rs.getTime("heurefin"));
+                ema.setIdMatiere(rs.getString("idmatiere"));
+                ema.setEtat(rs.getInt("etat"));
 				liste.add(ema);
 			}
 			rs.close();
