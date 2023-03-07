@@ -5,6 +5,13 @@
  */
 package com.main.Model;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.main.Base.Connexion;
 
 /**
  *
@@ -33,5 +40,108 @@ public class Jour {
     public void setNomJour(String nomJour) {
         this.nomJour = nomJour;
     }
+    
+    
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //CRUD
+    public void create(Jour jour) throws SQLException
+	{
+		String requete = "insert into jour values(default,'"+jour.getNomJour()+"')";
+		Connection connect = null;
+		Statement state = null;
+		
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			state.execute(requete);
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+	}
+    
+    public ArrayList<Jour> read() throws SQLException
+	{
+		String requete = "select * from jour";
+		ArrayList<Jour> liste = new ArrayList<>();
+		Connection connect = null;
+		Statement state = null;
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			ResultSet rs = state.executeQuery(requete);
+			while(rs.next())
+			{
+				Jour jour = new Jour();
+				jour.setIdJour(rs.getString("idjour"));
+				jour.setNomJour(rs.getString("nomjour"));
+				liste.add(jour);
+			}
+			rs.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+		return liste;
+	}
+	
+	public void update(Jour jour,String id) throws SQLException
+	{
+		String requete = "update anneeEtude set nomJour='"+jour.getNomJour()+"' where idJour='"+id+"'";
+		Connection connect = null;
+		Statement state = null;
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			state.execute(requete);
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+	}
+	
+	
+	public void delete(String id) throws SQLException
+	{
+		String requete = "delete from jour where idjour='"+id+"'";
+		Connection connect = null;
+		Statement state = null;
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			state.execute(requete);
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+	}
 
 }
