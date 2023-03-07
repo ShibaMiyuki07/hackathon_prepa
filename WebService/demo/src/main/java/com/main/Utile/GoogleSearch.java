@@ -1,53 +1,49 @@
 package com.main.Utile;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class GoogleSearch {
-	final static String apiKey = "AIzaSyCfZi-NQMR4Ua6pau7RLdSCZ574iOEx_2M";
-    final static String customSearchEngineKey = "017576662512468239146:omuauf_lfve";
-    final static String searchURL = "https://www.googleapis.com/customsearch/v1?";
     
     
-    public static String search(String pUrl) {
-        try {
-            URL url = new URL(pUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line;
-            StringBuffer buffer = new StringBuffer();
-            while ((line = br.readLine()) != null) {
-                buffer.append(line);
+    public static ArrayList<Lien> search(String recherche) throws IOException {
+    	String url =  "https://www.google.com/search?q="+recherche;
+        //print("Fetching %s...", url);
+    	
+        Document doc = Jsoup.connect(url).get();
+        Elements links = doc.select("a[href]");
+        ArrayList<Lien> retour = new ArrayList<>();
+
+
+        //print("\nLinks: (%d)", links.size());
+        for (Element link : links) {
+            if(!link.attr("abs:href").contains(".google.com") && !link.attr("abs:href").startsWith("https://translate.google.com/translate"))
+            {
+                 //print(" * a: %s  (%s)", link.attr("abs:href"), trim(link.text(), 35));
+            	Lien lien = new Lien();
+            	lien.setLien(link.attr("abs:href"));
+            	lien.setTitre(trim(link.text(), 35));
+            	retour.add(lien);
             }
-            return buffer.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
+           
         }
-        return null;
-    }
-    
-    private static String buildSearchString(String searchString, int start, int numOfResults) {
-        String toSearch = searchURL + "key=" + apiKey + "&cx=" + customSearchEngineKey + "&q=";
-        // replace spaces in the search query with +
-        String newSearchString = searchString.replace(" ", "%20");
-        toSearch += newSearchString;
-        // specify response format as json
-        toSearch += "&alt=json";
-        // specify starting result number
-        toSearch += "&start=" + start;
-        // specify the number of results you need from the starting position
-        toSearch += "&num=" + numOfResults;
-        System.out.println("Seacrh URL: " + toSearch);
-        return toSearch;
+        return retour;
     }
     
     
-    public String rechercheSuggestion(String aRechercher)
-    {
-    	String url = buildSearchString(aRechercher,1,10);
-    	String result = search(url);
-    	return result;
+    private static String trim(String s, int width) {
+        if (s.length() > width)
+            return s.substring(0, width-1) + ".";
+        else
+            return s;
     }
 }

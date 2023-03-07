@@ -1,5 +1,6 @@
 package com.main.Utile;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -7,7 +8,7 @@ import com.main.Model.Matiere;
 import com.main.Model.Note_etudiant_matiere;
 
 public class Utilitaire {
-	public String suggestion(String idEtudiant,String idmatiere) throws SQLException
+	public ArrayList<Lien> suggestion(String idEtudiant,String idmatiere) throws SQLException, IOException
 	{
 		Note_etudiant_matiere retour = new Note_etudiant_matiere().select(idEtudiant, idmatiere);
 		Matiere matiere = new Matiere().select(idmatiere);
