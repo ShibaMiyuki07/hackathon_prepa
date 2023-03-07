@@ -5,6 +5,13 @@
  */
 package com.main.Model;
 
+import com.main.Base.Connexion;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 /**
  *
  * @author RickyBic
@@ -41,5 +48,63 @@ public class Emploi_temps_auto {
     public void setNote(Float note) {
         this.note = note;
     }
+    
+    //CRUD
+	public void create(Emploi_temps_auto ema) throws SQLException
+	{
+		String requete = "insert into Emploi_temps_auto values('"+ ema.getIdetudiant() +"','"+ema.getIdMatiere()+"','"+ema.getNote()+"')";
+		Connection connect = null;
+		Statement state = null;
+		
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			state.execute(requete);
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+	}
+	
+	
+	public ArrayList<Emploi_temps_auto> read() throws SQLException
+	{
+		String requete = "select * from Emploi_temps_auto";
+		ArrayList<Emploi_temps_auto> liste = new ArrayList<Emploi_temps_auto>();
+		Connection connect = null;
+		Statement state = null;
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			ResultSet rs = state.executeQuery(requete);
+			while(rs.next())
+			{
+				Emploi_temps_auto ema = new Emploi_temps_auto();
+				ema.setIdetudiant(rs.getString("idetudiant"));
+                                ema.setIdMatiere(rs.getString("idmatiere"));
+                                ema.setNote(rs.getFloat("note"));
+				liste.add(ema);
+			}
+			rs.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+		return liste;
+	}
 
 }

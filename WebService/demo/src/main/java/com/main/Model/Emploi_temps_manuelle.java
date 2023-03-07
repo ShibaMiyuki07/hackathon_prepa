@@ -5,7 +5,13 @@
  */
 package com.main.Model;
 
+import com.main.Base.Connexion;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
+import java.util.ArrayList;
 
 /**
  *
@@ -70,5 +76,68 @@ public class Emploi_temps_manuelle {
     public void setEtat(Integer etat) {
         this.etat = etat;
     }
+    
+    //CRUD
+	public void create(Emploi_temps_manuelle emm) throws SQLException
+	{
+		String requete = "insert into Emploi_temps_manuelle values('"+ emm.getIdetudiant() +"',"
+                        + "'"+emm.getIdJour()+"','"+emm.getHeureDebut()+"','"+emm.getHeureFin()+"'"
+                        + ",'"+emm.getIdMatiere()+"',,'"+emm.getEtat()+"')";
+		Connection connect = null;
+		Statement state = null;
+		
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			state.execute(requete);
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+	}
+	
+	
+	public ArrayList<Emploi_temps_manuelle> read() throws SQLException
+	{
+		String requete = "select * from Emploi_temps_manuelle";
+		ArrayList<Emploi_temps_manuelle> liste = new ArrayList<Emploi_temps_manuelle>();
+		Connection connect = null;
+		Statement state = null;
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			ResultSet rs = state.executeQuery(requete);
+			while(rs.next())
+			{
+				Emploi_temps_manuelle emm = new Emploi_temps_manuelle();
+				emm.setIdetudiant(rs.getString("idetudiant"));
+                                emm.setIdJour(rs.getString("idjour"));
+                                emm.setHeureDebut(rs.getTime("heuredebut"));
+                                emm.setHeureFin(rs.getTime("heurefin"));
+                                emm.setIdMatiere(rs.getString("idmatiere"));
+                                emm.setEtat(rs.getInt("etat"));
+				liste.add(emm);
+			}
+			rs.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+		return liste;
+	}
 
 }

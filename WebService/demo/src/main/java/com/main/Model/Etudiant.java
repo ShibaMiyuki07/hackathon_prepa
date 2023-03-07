@@ -5,7 +5,13 @@
  */
 package com.main.Model;
 
+import com.main.Base.Connexion;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *
@@ -88,5 +94,92 @@ public class Etudiant {
     public void setPhotoprofil(String photoprofil) {
         this.photoprofil = photoprofil;
     }
+    
+    //CRUD
+	public void create(Etudiant et) throws SQLException
+	{
+		String requete = "insert into Etudiant values(default,'"+et.getNomEtudiant()+"'"
+                        + ",'"+et.getPrenomEtudiant()+"','"+et.getDateNaissance()+"','"+et.getEmail()+"'"
+                        + ",'"+et.getMdp()+"','"+et.getIdAnneeEtude()+"','"+et.getPhotoprofil()+"')";
+		Connection connect = null;
+		Statement state = null;
+		
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			state.execute(requete);
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+	}
+	
+	
+	public ArrayList<Etudiant> read() throws SQLException
+	{
+		String requete = "select * from Etudiant";
+		ArrayList<Etudiant> liste = new ArrayList<Etudiant>();
+		Connection connect = null;
+		Statement state = null;
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			ResultSet rs = state.executeQuery(requete);
+			while(rs.next())
+			{
+				Etudiant et = new Etudiant();
+				et.setIdEtudiant(rs.getString("idetudiant"));
+                                et.setNomEtudiant(rs.getString("NomEtudiant"));
+                                et.setPrenomEtudiant(rs.getString("PrenomEtudiant"));
+                                et.setDateNaissance(rs.getDate("DateNaissance"));
+                                et.setEmail(rs.getString("Email"));
+                                et.setMdp(rs.getString("Mdp"));
+                                et.setIdAnneeEtude(rs.getString("IdAnneeEtude"));
+                                et.setPhotoprofil(rs.getString("Photoprofil"));
+				liste.add(et);
+			}
+			rs.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+		return liste;
+	}
+	
+	public void delete(String id) throws SQLException
+	{
+		String requete = "delete from Etudiant where idEtudiant='"+id+"'";
+		Connection connect = null;
+		Statement state = null;
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			state.execute(requete);
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+	}
 
 }
