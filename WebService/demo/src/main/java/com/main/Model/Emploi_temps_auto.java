@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.util.ArrayList;
 
 /**
@@ -19,8 +20,11 @@ import java.util.ArrayList;
 public class Emploi_temps_auto {
 
     private String idetudiant;
+    private String idJour;
+    private Time heureDebut;
+    private Time heureFin;
     private String idMatiere;
-    private Float note;
+    private Integer etat;
 
     
 //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -33,6 +37,30 @@ public class Emploi_temps_auto {
         this.idetudiant = idetudiant;
     }
 
+    public String getIdJour() {
+        return idJour;
+    }
+
+    public void setIdJour(String idJour) {
+        this.idJour = idJour;
+    }
+
+    public Time getHeureDebut() {
+        return heureDebut;
+    }
+
+    public void setHeureDebut(Time heureDebut) {
+        this.heureDebut = heureDebut;
+    }
+
+    public Time getHeureFin() {
+        return heureFin;
+    }
+
+    public void setHeureFin(Time heureFin) {
+        this.heureFin = heureFin;
+    }
+
     public String getIdMatiere() {
         return idMatiere;
     }
@@ -41,18 +69,20 @@ public class Emploi_temps_auto {
         this.idMatiere = idMatiere;
     }
 
-    public Float getNote() {
-        return note;
+    public Integer getEtat() {
+        return etat;
     }
 
-    public void setNote(Float note) {
-        this.note = note;
+    public void setEtat(Integer etat) {
+        this.etat = etat;
     }
     
     //CRUD
 	public void create(Emploi_temps_auto ema) throws SQLException
 	{
-		String requete = "insert into Emploi_temps_auto values('"+ ema.getIdetudiant() +"','"+ema.getIdMatiere()+"','"+ema.getNote()+"')";
+		String requete = "insert into Emploi_temps_auto values('"+ ema.getIdetudiant() +"',"
+                        + "'"+ema.getIdJour()+"','"+ema.getHeureDebut()+"','"+ema.getHeureFin()+"'"
+                        + ",'"+ema.getIdMatiere()+"',,'"+ema.getEtat()+"')";
 		Connection connect = null;
 		Statement state = null;
 		
@@ -89,8 +119,11 @@ public class Emploi_temps_auto {
 			{
 				Emploi_temps_auto ema = new Emploi_temps_auto();
 				ema.setIdetudiant(rs.getString("idetudiant"));
+                                ema.setIdJour(rs.getString("idjour"));
+                                ema.setHeureDebut(rs.getTime("heuredebut"));
+                                ema.setHeureFin(rs.getTime("heurefin"));
                                 ema.setIdMatiere(rs.getString("idmatiere"));
-                                ema.setNote(rs.getFloat("note"));
+                                ema.setEtat(rs.getInt("etat"));
 				liste.add(ema);
 			}
 			rs.close();
