@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class Connexion {
-	private static String url = "jdbc:postgresql://localhost:5432/Etudes";
+	private static String url = "jdbc:postgresql://localhost:5432/hackathon";
     private static String user="postgres";
-    private static String passwd = "020402";
+    private static String passwd = "Kamisato";
 	private  Connection connect;
 	public  Connection setConnect()
 	{
