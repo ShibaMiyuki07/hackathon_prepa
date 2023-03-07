@@ -6,6 +6,7 @@
 package com.main.Model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,6 +23,7 @@ public class Note_etudiant_matiere {
     private String idetudiant;
     private String idmatiere;
     private Float note;
+    private Date dateajout;
 
     
 //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -52,12 +54,19 @@ public class Note_etudiant_matiere {
         this.note = note;
     }
     
-    
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public Date getDateajout() {
+		return dateajout;
+	}
+
+	public void setDateajout(Date dateajout) {
+		this.dateajout = dateajout;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //CRUD
     public void create(Note_etudiant_matiere note_etudiant_matiere) throws SQLException
 	{
-		String requete = "insert into note_etudiant_matiere values('"+note_etudiant_matiere.getIdetudiant()+"','"+note_etudiant_matiere.getIdmatiere()+"','"+note_etudiant_matiere.getNote()+"')";
+		String requete = "insert into note_etudiant_matiere values('"+note_etudiant_matiere.getIdetudiant()+"','"+note_etudiant_matiere.getIdmatiere()+"','"+note_etudiant_matiere.getNote()+"',default)";
 		Connection connect = null;
 		Statement state = null;
 		

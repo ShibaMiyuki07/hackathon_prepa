@@ -52,6 +52,7 @@ create table note_etudiant_matiere
     idetudiant char(30),
     idMatiere char(30),
     note float,
+    dateajout date default current_date,
     foreign key(idetudiant) references etudiant(idetudiant),
     foreign key(idMatiere) references matiere(idMatiere)
 );
