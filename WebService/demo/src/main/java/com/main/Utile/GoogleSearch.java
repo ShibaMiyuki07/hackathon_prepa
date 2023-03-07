@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
@@ -16,8 +17,8 @@ public class GoogleSearch {
     
     
     public static ArrayList<Lien> search(String recherche) throws IOException {
-    	String url =  "https://www.google.com/search?q="+recherche;
-        //print("Fetching %s...", url);
+    	String url =  "https://www.google.com/search?q="+URLEncoder.encode(recherche, "UTF-8");
+        System.out.println("Fetching '"+url+"'...");
     	
         Document doc = Jsoup.connect(url).get();
         Elements links = doc.select("a[href]");
