@@ -24,6 +24,7 @@ public class Note_etudiant_matiere {
     private String idmatiere;
     private Float note;
     private Date dateajout;
+    private int priorite;
 
     
 //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -60,6 +61,14 @@ public class Note_etudiant_matiere {
 
 	public void setDateajout(Date dateajout) {
 		this.dateajout = dateajout;
+	}
+
+	public int getPriorite() {
+		return priorite;
+	}
+
+	public void setPriorite(int priorite) {
+		this.priorite = priorite;
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -195,5 +204,37 @@ public class Note_etudiant_matiere {
     	return retour;
     }
     
-
+    public ArrayList<Note_etudiant_matiere> selectbyEtudiant(String id) throws SQLException
+	{
+		String requete = " select idmatiere,idetudiant,max(note) as note,max(dateajout) from note_etudiant_matiere where idetudiant='"+id+"'  group by idmatiere,idetudiant,dateajout order by dateajout asc";
+		System.out.println(requete);
+		ArrayList<Note_etudiant_matiere> liste = new ArrayList<>();
+		Connection connect = null;
+		Statement state = null;
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			ResultSet rs = state.executeQuery(requete);
+			while(rs.next())
+			{
+				Note_etudiant_matiere note_etudiant_matiere = new Note_etudiant_matiere();
+				note_etudiant_matiere.setIdetudiant(rs.getString("idetudiant"));
+				note_etudiant_matiere.setIdmatiere(rs.getString("idmatiere"));
+				note_etudiant_matiere.setNote(rs.getFloat("note"));
+				liste.add(note_etudiant_matiere);
+			}
+			rs.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+		return liste;
+	}
 }
