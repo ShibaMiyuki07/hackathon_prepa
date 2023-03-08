@@ -6,23 +6,26 @@
 package com.main.Model;
 
 import com.main.Base.Connexion;
+import com.main.View.V_Auto_Matiere_Jour;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
  *
  * @author RickyBic
  */
-public class Emploi_temps_auto {
+public class Emploi_temps_auto{
 
     private String idetudiant;
     private String idJour;
-    private Time heureDebut;
-    private Time heureFin;
+    private LocalTime heureDebut;
+    private LocalTime heureFin;
     private String idMatiere;
     private Integer etat;
 
@@ -45,23 +48,23 @@ public class Emploi_temps_auto {
         this.idJour = idJour;
     }
 
-    public Time getHeureDebut() {
-        return heureDebut;
-    }
+    public LocalTime getHeureDebut() {
+		return heureDebut;
+	}
 
-    public void setHeureDebut(Time heureDebut) {
-        this.heureDebut = heureDebut;
-    }
+	public void setHeureDebut(LocalTime heureDebut) {
+		this.heureDebut = heureDebut;
+	}
 
-    public Time getHeureFin() {
-        return heureFin;
-    }
+	public LocalTime getHeureFin() {
+		return heureFin;
+	}
 
-    public void setHeureFin(Time heureFin) {
-        this.heureFin = heureFin;
-    }
+	public void setHeureFin(LocalTime heureFin) {
+		this.heureFin = heureFin;
+	}
 
-    public String getIdMatiere() {
+	public String getIdMatiere() {
         return idMatiere;
     }
 
@@ -120,8 +123,8 @@ public class Emploi_temps_auto {
 				Emploi_temps_auto ema = new Emploi_temps_auto();
 				ema.setIdetudiant(rs.getString("idetudiant"));
                 ema.setIdJour(rs.getString("idjour"));
-                ema.setHeureDebut(rs.getTime("heuredebut"));
-                ema.setHeureFin(rs.getTime("heurefin"));
+                ema.setHeureDebut(rs.getTime("heuredebut").toLocalTime());
+                ema.setHeureFin(rs.getTime("heurefin").toLocalTime());
                 ema.setIdMatiere(rs.getString("idmatiere"));
                 ema.setEtat(rs.getInt("etat"));
 				liste.add(ema);
@@ -138,6 +141,85 @@ public class Emploi_temps_auto {
 			if(state != null) state.close();
 		}
 		return liste;
+	}
+	
+	public ArrayList<V_Auto_Matiere_Jour> creation_Auto(String idEtudiant) throws SQLException
+	{
+		@SuppressWarnings("deprecation")
+		LocalTime heureDebut = new Time(6,0,0).toLocalTime();
+		ArrayList<Jour> liste_jour = new Jour().read();
+		@SuppressWarnings("deprecation")
+		LocalTime heureFin = new Time(23, 0, 0).toLocalTime();
+		
+		Cycle cycle = new Cycle().selectByEtudiant(idEtudiant);
+		ArrayList<Matiere> liste_matiere_total = new Matiere().read();
+		ArrayList<V_Auto_Matiere_Jour> retour = new ArrayList<>();
+		ArrayList<Note_etudiant_matiere> liste_matiere = new Note_etudiant_matiere().selectbyEtudiant(idEtudiant);
+		int priorite = 0;
+		int index_jour = 0;
+		int nbr_cycle = 10800/(cycle.getDuree()+20);
+		for(int i=0;i<liste_matiere.size();i++)
+		{
+			liste_matiere.get(i).setPriorite(priorite);
+			priorite++;
+		}
+		
+		while(index_jour<liste_jour.size())
+		{
+			while(nbr_cycle>0)
+			{
+				for(int i=0;i<liste_matiere.size();i++)
+				{
+					LocalTime heureFinMatiere = heureDebut.plusMinutes(cycle.getDuree());
+					
+					
+					V_Auto_Matiere_Jour emploi_temps_auto = new V_Auto_Matiere_Jour();
+					
+					String idmatiere = liste_matiere.get(i).getIdmatiere().replace("M00", "");
+					idmatiere = idmatiere.replace(" ", "");
+					System.out.println(idmatiere);
+					int index_matiere = Integer.parseInt(idmatiere);
+					
+					/*System.out.println("Heure debut : "+emploi_temps_auto.getHeureDebut());
+					System.out.println("Heure fin : "+emploi_temps_auto.getHeureFin());
+					System.out.println("Matiere : "+liste_matiere_total.get(index_matiere-1).getNomMatiere());
+					System.out.println("Jour : "+liste_jour.get(index_jour).getNomJour());
+					System.out.println("Comparaison : "+heureFinMatiere.compareTo(heureFin));
+					System.out.println();*/
+					
+					
+					emploi_temps_auto.setIdJour(liste_jour.get(index_jour).getIdJour());
+					emploi_temps_auto.setHeureDebut(heureDebut);
+					emploi_temps_auto.setHeureFin(heureFinMatiere);
+					emploi_temps_auto.setIdMatiere(liste_matiere.get(i).getIdmatiere());
+					emploi_temps_auto.setIdetudiant(idEtudiant);
+					emploi_temps_auto.setEtat(0);
+					emploi_temps_auto.setMatiere(liste_matiere_total.get(index_matiere-1));
+					emploi_temps_auto.setJour(liste_jour.get(index_jour));
+					
+					heureDebut = heureFinMatiere;
+					retour.add(emploi_temps_auto);
+					if(heureFinMatiere.compareTo(heureFin) >=0)
+					{
+						break;
+					}
+					if(nbr_cycle<0)
+					{
+						break;
+					}
+					nbr_cycle--;
+				}
+				if(heureDebut.compareTo(heureFin) >=0)
+				{
+					break;
+				}
+			}
+			heureDebut = new Time(5,0,0).toLocalTime();
+			nbr_cycle = 10800/(cycle.getDuree()+20);
+			index_jour++;		
+			
+		}
+		return retour;
 	}
 
 }
