@@ -152,5 +152,37 @@ public class Cycle {
 			if(state != null) state.close();
 		}
 	}
+	
+	
+	public Cycle selectByEtudiant(String id) throws SQLException
+	{
+		String requete = "select * from cycle where idetudiant = '"+id+"' order by idCycle desc limit 1";
+		Cycle cycle = new Cycle();
+		Connection connect = null;
+		Statement state = null;
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			ResultSet rs = state.executeQuery(requete);
+			while(rs.next())
+			{
+				cycle.setIdCycle(rs.getString("idcycle"));
+				cycle.setIdEtudiant(rs.getString("idetudiant"));
+				cycle.setDuree(rs.getInt("duree"));
+			}
+			rs.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+		return cycle;
+	}
 
 }
