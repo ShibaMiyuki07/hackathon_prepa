@@ -94,3 +94,5 @@ insert into matiere values(default,'Anglais'),(default,'Fracais'),(default,'Math
 insert into anneeEtude values(default,'Bacc'),(default,'Bacc+1');
 
 insert into etudiant values(default,'Rakoto','Manitra','2003-04-18','manitrarakotoar@gmail.com','Manitra07!','A002',null);
+
+insert into note_etudiant_matiere values('E001','M003','10.0',default);
