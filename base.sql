@@ -87,3 +87,10 @@ create table emploi_temps_auto
     foreign key (idJour) references jour(idJour),
     foreign key(idMatiere) references matiere(idMatiere)
 );
+
+
+insert into matiere values(default,'Anglais'),(default,'Fracais'),(default,'Mathematique'),(default,'Physique'),(default,'Chimie');
+
+insert into anneeEtude values(default,'Bacc'),(default,'Bacc+1');
+
+insert into etudiant values(default,'Rakoto','Manitra','2003-04-18','manitrarakotoar@gmail.com','Manitra07!','A002',null);
