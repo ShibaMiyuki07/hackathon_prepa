@@ -96,3 +96,7 @@ insert into anneeEtude values(default,'Bacc'),(default,'Bacc+1');
 insert into etudiant values(default,'Rakoto','Manitra','2003-04-18','manitrarakotoar@gmail.com','Manitra07!','A002',null);
 
 insert into note_etudiant_matiere values('E001','M003','10.0',default);
+
+insert into jour values(default,'Lundi'),(default,'Mardi'),(default,'Mercredi'),(default,'Jeudi'),(default,'Vendredi'),(default,'Samedi'),(default,'Dimanche');
+
+insert into cycle values(default,'E001','50');
