@@ -15,11 +15,11 @@ public class Utilitaire {
 		String suggestion = "";
 		if(retour.getNote() > 10)
 		{
-			suggestion = "exercice "+matiere.getNomMatiere();
+			suggestion = "exercice "+matiere.getNomMatiere().replace(" ", "");
 		}
 		else
 		{
-			suggestion = "tuto "+matiere.getNomMatiere();
+			suggestion = "tuto "+matiere.getNomMatiere().replace(" ", "");
 		}
 		return GoogleSearch.search(suggestion);
 	}
