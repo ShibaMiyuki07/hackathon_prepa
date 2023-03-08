@@ -6,7 +6,7 @@
 package com.main.Model;
 
 import com.main.Base.Connexion;
-import com.main.View.V_Auto_Matiere_Jour;
+import com.main.View.V_Emploi_Matiere_Jour;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -143,7 +143,7 @@ public class Emploi_temps_auto{
 		return liste;
 	}
 	
-	public ArrayList<V_Auto_Matiere_Jour> creation_Auto(String idEtudiant) throws SQLException
+	public ArrayList<V_Emploi_Matiere_Jour> creation_Auto(String idEtudiant) throws SQLException
 	{
 		@SuppressWarnings("deprecation")
 		LocalTime heureDebut = new Time(6,0,0).toLocalTime();
@@ -153,7 +153,7 @@ public class Emploi_temps_auto{
 		
 		Cycle cycle = new Cycle().selectByEtudiant(idEtudiant);
 		ArrayList<Matiere> liste_matiere_total = new Matiere().read();
-		ArrayList<V_Auto_Matiere_Jour> retour = new ArrayList<>();
+		ArrayList<V_Emploi_Matiere_Jour> retour = new ArrayList<>();
 		ArrayList<Note_etudiant_matiere> liste_matiere = new Note_etudiant_matiere().selectbyEtudiant(idEtudiant);
 		int priorite = 0;
 		int index_jour = 0;
@@ -173,7 +173,7 @@ public class Emploi_temps_auto{
 					LocalTime heureFinMatiere = heureDebut.plusMinutes(cycle.getDuree());
 					
 					
-					V_Auto_Matiere_Jour emploi_temps_auto = new V_Auto_Matiere_Jour();
+					V_Emploi_Matiere_Jour emploi_temps_auto = new V_Emploi_Matiere_Jour();
 					
 					String idmatiere = liste_matiere.get(i).getIdmatiere().replace("M00", "");
 					idmatiere = idmatiere.replace(" ", "");

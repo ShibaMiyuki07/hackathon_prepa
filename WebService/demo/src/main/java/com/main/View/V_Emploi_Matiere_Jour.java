@@ -4,7 +4,7 @@ import com.main.Model.Emploi_temps_auto;
 import com.main.Model.Jour;
 import com.main.Model.Matiere;
 
-public class V_Auto_Matiere_Jour extends Emploi_temps_auto{
+public class V_Emploi_Matiere_Jour extends Emploi_temps_auto{
 	private Matiere matiere;
 	private Jour jour;
 	public Matiere getMatiere() {
