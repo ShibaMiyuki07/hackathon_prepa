@@ -181,5 +181,43 @@ public class Etudiant {
 			if(state != null) state.close();
 		}
 	}
+	
+	
+	public Etudiant login(Etudiant etudiant) throws SQLException
+	{
+		String requete = "select * from etudiant where email='"+etudiant.getEmail()+"' and mdp='"+etudiant.getMdp()+"'";
+		System.out.println(requete);
+		Etudiant et = new Etudiant();
+		Connection connect = null;
+		Statement state = null;
+		try
+		{
+			connect = new Connexion().setConnect();
+			state = connect.createStatement();
+			ResultSet rs = state.executeQuery(requete);
+			while(rs.next())
+			{
+				et.setIdEtudiant(rs.getString("idetudiant"));
+                et.setNomEtudiant(rs.getString("nomEtudiant"));
+                et.setPrenomEtudiant(rs.getString("prenomEtudiant"));
+                et.setDateNaissance(rs.getDate("dateNaissance"));
+                et.setEmail(rs.getString("email"));
+                et.setMdp(rs.getString("mdp"));
+                et.setIdAnneeEtude(rs.getString("idAnneeEtude"));
+                et.setPhotoprofil(rs.getString("photoprofil"));
+			}
+			rs.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(connect != null) connect.close();
+			if(state != null) state.close();
+		}
+		return et;
+	}
 
 }
